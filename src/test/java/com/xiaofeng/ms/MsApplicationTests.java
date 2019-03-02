@@ -5,12 +5,18 @@ import com.xiaofeng.ms.redis.RedisConfig;
 import com.xiaofeng.ms.redis.RedisService;
 import com.xiaofeng.ms.redis.UserRedisKey;
 import com.xiaofeng.ms.service.UserService;
+import com.xiaofeng.ms.util.MD5Util;
+import com.xiaofeng.ms.util.ValidatorUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.validation.Valid;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,18 +30,18 @@ public class MsApplicationTests {
 
     @Autowired
     private RedisService redisService;
+
+    private Logger logger = LoggerFactory.getLogger(MsApplicationTests.class);
     @Test
     public void contextLoads() {
     }
     @Test
     public void testDb(){
-        User user = userService.getUserById(1);
-        System.out.println(user.getName());
     }
 
     @Test
     public void testTran(){
-        userService.getTran();
+        //userService.getTran();
     }
     @Test
     public void testRedis(){
@@ -53,4 +59,12 @@ public class MsApplicationTests {
         System.out.println("结果:"+redisService.get(UserRedisKey.userRedisKeyById,"1"));
     }
 
+    @Test
+    public void testMD5(){
+        System.out.println("密码:"+MD5Util.inputPass2TranPass("123456"));
+    }
+    @Test
+    public void testIsMoblie(){
+        logger.info(String.valueOf(ValidatorUtil.isMobile("12345678")));
+    }
 }
