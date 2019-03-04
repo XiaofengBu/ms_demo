@@ -45,18 +45,22 @@ public class MsApplicationTests {
     }
     @Test
     public void testRedis(){
-        String key = UserRedisKey.userRedisKeyById.getRedisKey() + "1";
-        redisTemplate.opsForValue().set(key,"2019年2月28日16:37:51");
-        System.out.println(redisTemplate.opsForValue().get(key));
+//        String key = UserRedisKey.userRedisKeyById.getRedisKey() + "1";
+//        redisTemplate.opsForValue().set(key,"2019年2月28日16:37:51");
+//        System.out.println(redisTemplate.opsForValue().get(key));
     }
 
     @Test
     public void testRedisService(){
-        redisService.delete(UserRedisKey.userRedisKeyById,"1");
+        //redisService.delete(UserRedisKey.userRedisKeyById,"1");
         //redisService.set(UserRedisKey.userRedisKeyById,"1",1);
         //redisService.incr(UserRedisKey.userRedisKeyById,"1");
         //redisService.dec(UserRedisKey.userRedisKeyById,"1");
-        System.out.println("结果:"+redisService.get(UserRedisKey.userRedisKeyById,"1"));
+        User user = new User();
+        user.setNickname("测试");
+        redisService.set(UserRedisKey.token,"123",user);
+        User user2 = redisService.get(UserRedisKey.token,"123",User.class);
+        System.out.println("结果:"+ user2.getNickname());
     }
 
     @Test
