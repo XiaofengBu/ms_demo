@@ -1,5 +1,6 @@
 package com.xiaofeng.ms.redis;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -11,17 +12,18 @@ public class RedisService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    public Object get(BaseRedisKey baseKey, String key){
+    public <T> T get(BaseRedisKey baseKey, String key,Class<T> clazz){
         String realKey = baseKey.getRedisKey() + key;
-        return redisTemplate.opsForValue().get(realKey);
+        return stringToBean(redisTemplate.opsForValue().get(realKey).toString(),clazz);
     }
 
-    public void set(BaseRedisKey baseKey, String key, Object value){
+    public <T> void set(BaseRedisKey baseKey, String key, T value){
         String realKey = baseKey.getRedisKey() + key;
+        String str = beanToString(value);
         if(baseKey.getTimeOut() == 0 ){
-            redisTemplate.opsForValue().set(realKey, value);
+            redisTemplate.opsForValue().set(realKey, str);
         }else {
-            redisTemplate.opsForValue().set(realKey, value, baseKey.getTimeOut(), TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(realKey, str, baseKey.getTimeOut(), TimeUnit.SECONDS);
         }
     }
 
@@ -43,6 +45,35 @@ public class RedisService {
     public Long dec(BaseRedisKey baseKey, String key){
         String realKey = baseKey.getRedisKey() + key;
         return redisTemplate.opsForValue().decrement(realKey);
+    }
+    private <T> String beanToString(T value) {
+        if(value == null) {
+            return null;
+        }
+        Class<?> clazz = value.getClass();
+        if(clazz == int.class || clazz == Integer.class) {
+            return ""+value;
+        }else if(clazz == String.class) {
+            return (String)value;
+        }else if(clazz == long.class || clazz == Long.class) {
+            return ""+value;
+        }else {
+            return JSON.toJSONString(value);
+        }
+    }
+    private <T> T stringToBean(String str, Class<T> clazz) {
+        if(str == null || str.length() <= 0 || clazz == null) {
+            return null;
+        }
+        if(clazz == int.class || clazz == Integer.class) {
+            return (T)Integer.valueOf(str);
+        }else if(clazz == String.class) {
+            return (T)str;
+        }else if(clazz == long.class || clazz == Long.class) {
+            return  (T)Long.valueOf(str);
+        }else {
+            return JSON.toJavaObject(JSON.parseObject(str), clazz);
+        }
     }
 
 

@@ -17,7 +17,7 @@ import java.util.List;
 @ResponseBody
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = {BindException.class,GlobalException.class})
-    public Result<String> bindExceptionHandler(HttpServletRequest request, Exception e){
+    public Result<String> globalExceptionHandler(HttpServletRequest request, Exception e){
         e.printStackTrace();
         if(e instanceof BindException){
             BindException bindException = (BindException) e;

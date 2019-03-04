@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sun.nio.cs.US_ASCII;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Controller
@@ -32,8 +33,8 @@ public class LoginController {
 
     @RequestMapping("/doLogin")
     @ResponseBody
-    public Result<Boolean> doLogin(@Valid LoginVO loginVO){
-        userService.login(loginVO);
+    public Result<Boolean> doLogin(@Valid LoginVO loginVO, HttpServletResponse response){
+        userService.login(loginVO,response);
         return Result.success(true);
     }
 }

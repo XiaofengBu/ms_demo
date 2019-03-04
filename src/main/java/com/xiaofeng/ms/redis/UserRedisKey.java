@@ -1,9 +1,9 @@
 package com.xiaofeng.ms.redis;
 
 public class UserRedisKey extends BaseRedisKey{
-    private UserRedisKey(String key){
-        super(key);
+    public static final int TOKEN_EXPIRE = 3600*24 * 2;
+    private UserRedisKey(int expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
     }
-    public static UserRedisKey userRedisKeyById = new UserRedisKey("id");
-    public static UserRedisKey userRedisKeyByName = new UserRedisKey("name");
+    public static UserRedisKey token = new UserRedisKey(TOKEN_EXPIRE, "tk");
 }
