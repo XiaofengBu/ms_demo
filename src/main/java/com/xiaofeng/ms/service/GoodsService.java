@@ -15,4 +15,7 @@ public class GoodsService {
     public List<MsGoodVO> getMsGoodList(){
         return goodsMapper.getMsGoodsList();
     }
+    public MsGoodVO getGoodsVoByGoodsId(long goodsId) {
+        return goodsMapper.getGoodsVoByGoodsId(goodsId);
+    }
 }
