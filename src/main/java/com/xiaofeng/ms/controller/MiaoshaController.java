@@ -35,7 +35,8 @@ public class MiaoshaController {
 	
 	@Autowired
 	MiaoshaService miaoshaService;
-	
+
+	//800进程 10次 大约1000qps
     @RequestMapping("/do_miaosha")
     public String list(Model model, User user,
 					   @RequestParam("goodsId")long goodsId) {

@@ -35,7 +35,7 @@ public class UserService {
         return userMapper.getUserById(id);
     }
 
-    public Boolean login(LoginVO loginVO, HttpServletResponse response) throws GlobalException{
+    public String login(LoginVO loginVO, HttpServletResponse response) throws GlobalException{
         if(loginVO == null || loginVO.getPassword() == null || loginVO.getMobile() == null){
             throw new ServerException();
         }
@@ -51,7 +51,7 @@ public class UserService {
         if(dbPass.equals(calcPass)){
             String token = UUIDUtil.uuid();
             addUserToSession(response,token,user);
-            return true;
+            return token;
         }else{
             throw new LoginException();
         }
