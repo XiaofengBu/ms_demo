@@ -14,7 +14,8 @@ public class RedisService {
 
     public <T> T get(BaseRedisKey baseKey, String key,Class<T> clazz){
         String realKey = baseKey.getRedisKey() + key;
-        return stringToBean(redisTemplate.opsForValue().get(realKey).toString(),clazz);
+        T object = stringToBean(redisTemplate.opsForValue().get(realKey),clazz);
+        return object;
     }
 
     public <T> void set(BaseRedisKey baseKey, String key, T value){
@@ -61,10 +62,11 @@ public class RedisService {
             return JSON.toJSONString(value);
         }
     }
-    private <T> T stringToBean(String str, Class<T> clazz) {
-        if(str == null || str.length() <= 0 || clazz == null) {
+    private <T> T stringToBean(Object obj, Class<T> clazz) {
+        if(obj == null || clazz == null) {
             return null;
         }
+        String str = obj.toString();
         if(clazz == int.class || clazz == Integer.class) {
             return (T)Integer.valueOf(str);
         }else if(clazz == String.class) {
