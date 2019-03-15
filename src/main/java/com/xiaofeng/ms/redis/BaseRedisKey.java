@@ -20,7 +20,6 @@ public abstract class BaseRedisKey {
     }
     public String getRedisKey(){
         String key = getClass().getName() + ":" +redisKey;
-        System.out.println("真实的key:" + key);
         return key;
     }
 }

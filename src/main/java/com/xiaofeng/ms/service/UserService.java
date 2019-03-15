@@ -32,9 +32,33 @@ public class UserService {
     public static String TOKEN_COOKIE_NAME = "token";
 
     public User getUserById(Long id){
-        return userMapper.getUserById(id);
+        User user = redisService.get(UserRedisKey.getById, ""+id, User.class);
+        if(user != null) {
+            return user;
+        }
+        user = userMapper.getUserById(id);
+        if (user !=null){
+            redisService.set(UserRedisKey.getById, ""+id,user);
+        }
+        return user;
     }
-
+    public boolean updatePassword(String token, long id, String formPass) {
+        //取user
+        User user = getUserById(id);
+        if(user == null) {
+            throw new LoginException();
+        }
+        //更新数据库
+        User toBeUpdate = new User();
+        toBeUpdate.setId(id);
+        toBeUpdate.setPassword(MD5Util.inputPass2DBPass(formPass, user.getSalt()));
+        userMapper.update(toBeUpdate);
+        //处理缓存
+        redisService.delete(UserRedisKey.getById, ""+id);
+        user.setPassword(toBeUpdate.getPassword());
+        redisService.set(UserRedisKey.token, token, user);
+        return true;
+    }
     public String login(LoginVO loginVO, HttpServletResponse response) throws GlobalException{
         if(loginVO == null || loginVO.getPassword() == null || loginVO.getMobile() == null){
             throw new ServerException();

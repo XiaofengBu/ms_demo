@@ -23,6 +23,9 @@ public class OrderService {
 		return orderMapper.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
 	}
 
+	public Order getOrderById(long orderId) {
+		return orderMapper.getOrderById(orderId);
+	}
 	@Transactional
 	public Order createOrder(User user, MsGoodVO goods) {
 		Order orderInfo = new Order();

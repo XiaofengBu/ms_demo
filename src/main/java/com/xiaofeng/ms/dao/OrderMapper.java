@@ -1,5 +1,6 @@
 package com.xiaofeng.ms.dao;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import com.xiaofeng.ms.model.MsOrder;
 import com.xiaofeng.ms.model.Order;
 import org.apache.ibatis.annotations.Insert;
@@ -22,5 +23,7 @@ public interface OrderMapper {
 	@Insert("insert into ms_order (user_id, goods_id, order_id)values(#{userId}, #{goodsId}, #{orderId})")
 	public int insertMiaoshaOrder(MsOrder msOrder);
 
+	@Select("select * from order_info where id = #{orderId}")
+	public Order getOrderById(@Param("orderId")long orderId);
 	
 }

@@ -6,4 +6,5 @@ public class UserRedisKey extends BaseRedisKey{
         super(expireSeconds, prefix);
     }
     public static UserRedisKey token = new UserRedisKey(TOKEN_EXPIRE, "tk");
+    public static UserRedisKey getById = new UserRedisKey(0, "id");
 }
